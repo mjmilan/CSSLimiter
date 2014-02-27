@@ -36,6 +36,8 @@ namespace CSSLimiter
 		[CommandLine.Option('i',"id")]
 		public string ContainingID {get;set;}
 		
+		[CommandLine.Option('f',"filename")]
+		public string CSSFilename {get; set;}
 		#endregion
 		
 		
