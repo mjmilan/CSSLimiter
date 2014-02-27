@@ -14,7 +14,6 @@ namespace CSSLimiter
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
 			bool flag = true;
 			// Gather the arguments from the command line.
 			Arguments commandLineArgs = GetArguments(args);
@@ -22,7 +21,7 @@ namespace CSSLimiter
 			// Get an object representing the stylesheet.
 			ExCSS.StyleSheet sheet = null;
 			try{
-				 sheet = GetStyleSheet("");
+				 sheet = GetStyleSheet(commandLineArgs.CSSFilename);
 			}
 			catch (System.IO.IOException){
 				Console.WriteLine("Unable to open file \"{0}\".", commandLineArgs.CSSFilename);
@@ -32,7 +31,10 @@ namespace CSSLimiter
 			
 			if (flag)
 			{
-				
+				// Ok, at this point, we have the sheet, and we have the arguments.
+				// Let's get processing.
+				string newCss = ProcessSheet(sheet, commandLineArgs);
+				Console.WriteLine(newCss);
 			}
 			
 			Console.ReadKey(true);
@@ -52,6 +54,42 @@ namespace CSSLimiter
 			ExCSS.StyleSheet result;
 			result = new ExCSS.Parser().Parse(new System.IO.FileStream(cssFilePath, System.IO.FileMode.Open));
 			return result;
+		}
+		
+		private static string ProcessSheet(ExCSS.StyleSheet sheet, Arguments commandLineArgs)
+		{
+			string result = string.Empty;
+			foreach (var ruleset in sheet.Rulesets)
+			{
+				string[] selectors = ruleset.Value.Split(',');
+				for (int i = 0; i < selectors.Length; i++)
+				{
+					System.Text.StringBuilder sb = new System.Text.StringBuilder();
+					sb.Append(commandLineArgs.ContainingType);
+					if (!string.IsNullOrWhiteSpace(commandLineArgs.ContainingClass))
+					{
+						sb.Append(".");
+						sb.Append(commandLineArgs.ContainingClass);
+					}
+					if (!string.IsNullOrWhiteSpace(commandLineArgs.ContainingID))
+					{
+						sb.Append("#");
+						sb.Append(commandLineArgs.ContainingID);
+					}
+					
+					if (sb.Length > 0){
+						selectors[i] = string.Concat(sb.ToString()," ", selectors[i]);
+					}
+				}
+				
+				
+				ruleset.Value = string.Join(",", selectors);
+			}
+			
+			result = sheet.ToString(true);
+			
+			return result;
+			
 		}
 	}
 }

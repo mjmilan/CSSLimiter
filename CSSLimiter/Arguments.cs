@@ -15,7 +15,6 @@ namespace CSSLimiter
 	/// </summary>
 	public class Arguments
 	{
-	
 		
 		#region Constructor
 		public Arguments()
@@ -39,7 +38,6 @@ namespace CSSLimiter
 		[CommandLine.Option('f',"filename")]
 		public string CSSFilename {get; set;}
 		#endregion
-		
-		
+			
 	}
 }

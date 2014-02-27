@@ -23,7 +23,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <StartAction>Project</StartAction>
-    <StartArguments>--file "abc def.txt" -t div -c bootstrap -i #container</StartArguments>
+    <StartArguments>--filename "c:\example.css" -t div -c bootstrap</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
